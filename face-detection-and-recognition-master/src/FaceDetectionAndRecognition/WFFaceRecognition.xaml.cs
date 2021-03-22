@@ -14,7 +14,6 @@ using System.Runtime.CompilerServices;
 using Emgu.CV.Face;
 using Emgu.CV.Util;
 using Microsoft.Win32;
-using System.Security.AccessControl;
 
 namespace FaceDetectionAndRecognition
 {
@@ -181,10 +180,7 @@ namespace FaceDetectionAndRecognition
                     case MessageBoxResult.OK:
                         String dirName = Path.GetDirectoryName(Config.FaceListTextFile);
                         Directory.CreateDirectory(dirName);
-
-                        FileSecurity fSecurity = new FileSecurity();
-                        fSecurity.AddAccessRule(new FileSystemAccessRule(@"EVERYONE", FileSystemRights.Write, AccessControlType.Allow));
-                        File.Create(Config.FaceListTextFile, 1024, FileOptions.WriteThrough, fSecurity).Close();
+                        File.Create(dirName).Close();
                         break;
                 }
             }
