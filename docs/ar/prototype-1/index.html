@@ -1,0 +1,35 @@
+<!doctype HTML>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src="js/aframe.min.js"></script>
+    <script src="js/aframe-ar.js"></script>
+
+    <!-- support 3D text -->
+    <script src="js/aframe-text-geometry-component.min.js"></script>
+
+    <title>AR - Prototype #1</title>
+</head>
+<body style="margin: 0; overflow: hidden;">
+
+<a-scene embedded vr-mode-ui="enabled: false;" arjs="debugUIEnabled: false;">
+    <a-assets>
+        <a-asset-item id="exoFont" src="fonts/exoBlack.typeface.json"></a-asset-item>
+        <img id="pixels" src="images/pixels.png"/>
+    </a-assets>
+
+    <a-marker type="pattern" url="data/hiro.patt">
+        <a-plane color="white" rotation="-90 0 0" position="0 -0.25 0" width="4"
+                 material="transparent: true; opacity: 0.90"></a-plane>
+
+        <a-entity text-geometry="value: Hi, Aaron!; font: #exoFont;"
+                  material="color: pink; src: #pixels; repeat: 0.5 0.5;"
+                  position="-1.75 0 0.15"
+                  rotation="-90 0 0">
+        </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+</a-scene>
+</body>
+</html>
