@@ -12,3 +12,6 @@ Bekijk [hier](https://aaron5670.github.io/NotS-Project/) de prototypes.
 #### Face Recognition
 - OpenCV4Node.js met Express.js prototype (Hierbij werkt alleen Face Detection)
 - Microsoft Azure Face
+
+#### OpenCV4Node.js + Express.js + Docker
+![Screenshot](https://raw.githubusercontent.com/aaron5670/NotS-Project/main/docs/opencv4nodejs.png?token=AED6OKLTHRDOTX5CYWYV7DLAP3LMY)
