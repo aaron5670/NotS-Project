@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -13,7 +14,7 @@ public class FaceTextManager : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
         transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z);
         this.transform.Rotate(0, 180f, 0);
@@ -28,7 +29,14 @@ public class FaceTextManager : MonoBehaviour
         else
         {
             textMesh.text = "Hello World, In need for medical information";
-            GetImageAsync();
+            try
+            {
+                await GetImageAsync();
+            }
+            catch
+            {
+                textMesh.text = "Image saving failed";
+            }
         }
     }
 
@@ -40,8 +48,10 @@ public class FaceTextManager : MonoBehaviour
     }
     
     //Processing of taking image
-    public void GetImageAsync()
+    public async Task GetImageAsync()
     {
+
+        await Task.Delay(1000);
         // Get information about the device camera image.
         if (cameraManager.TryAcquireLatestCpuImage(out XRCpuImage image))
         {
