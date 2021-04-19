@@ -14,4 +14,4 @@ Bekijk [hier](https://aaron5670.github.io/NotS-Project/) de prototypes.
 - Microsoft Azure Face
 
 #### OpenCV4Node.js + Express.js + Docker
-![Screenshot](https://raw.githubusercontent.com/aaron5670/NotS-Project/main/docs/opencv4nodejs.png?token=AED6OKLTHRDOTX5CYWYV7DLAP3LMY)
+![Screenshot](https://raw.githubusercontent.com/aaron5670/NotS-Project/main/docs/opencv4nodejs.png?token=AED6OKMZRDPQBQ4P4OPPIJLAQZ426)
