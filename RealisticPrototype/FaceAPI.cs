@@ -13,8 +13,8 @@ namespace RealisticPrototype
     {
         static string personGroupId = Guid.NewGuid().ToString();
 
-        const string SUBSCRIPTION_KEY = "70ff5e1b8d664f858873f5d9df71a92a";
-        const string ENDPOINT = "https://nots.cognitiveservices.azure.com/";
+        const string SUBSCRIPTION_KEY = "a906d612481149c19984f4714107b2c2";
+        const string ENDPOINT = "https://notsface.cognitiveservices.azure.com/";
         const string RECOGNITION_MODEL3 = RecognitionModel.Recognition03;
         private IFaceClient client;
 
