@@ -1,3 +1,4 @@
+[![Build and deploy Patiënten API to Azure Web App](https://github.com/aaron5670/NotS-Project/actions/workflows/main_patients-api.yml/badge.svg?branch=main)](https://github.com/aaron5670/NotS-Project/actions/workflows/main_patients-api.yml)
 # NotS-Project
 NotS-Project with Augmented Reality and Facial Recognition
 
@@ -14,4 +15,4 @@ Bekijk [hier](https://aaron5670.github.io/NotS-Project/) de prototypes.
 - Microsoft Azure Face
 
 #### OpenCV4Node.js + Express.js + Docker
-![Screenshot](https://raw.githubusercontent.com/aaron5670/NotS-Project/main/docs/opencv4nodejs.png?token=AED6OKMZRDPQBQ4P4OPPIJLAQZ426)
+![Screenshot](https://github.com/aaron5670/NotS-Project/blob/main/docs/opencv4nodejs.png)
