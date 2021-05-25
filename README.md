@@ -23,7 +23,7 @@ Bekijk [hier](https://github.com/aaron5670/NotS-Project/tree/main/opencv4nodejs-
 Voor het proof of concept maken wij voor de backend gebruik van **Microservices**.
 
 ### Backend
-- **Patiënten API**
+- **Patiënten mock server API**
   - Overview alle patiënten ([https://patients-api.azurewebsites.net/api/patients](https://patients-api.azurewebsites.net/api/patients))
   - Overview van een specifieke patiënten ([https://patients-api.azurewebsites.net/api/patients/1](https://patients-api.azurewebsites.net/api/patients/1))
   - Patient toevoegen gaat via een *POST* request:
@@ -46,4 +46,12 @@ Voor het proof of concept maken wij voor de backend gebruik van **Microservices*
   - Een patiënt verwijderen gaat die een *DELETE* request:
     ```bash
     curl --request DELETE https://patients-api.azurewebsites.net/api/patients/1
+    ```
+- **Face Recognition API**
+  - Verstuur POST-request met als body een gezicht (in base64) naar 'http://51.144.142.34:3000/image'
+  - Voorbeeld Face-API *POST* request:
+    ```bash
+    curl -H "Content-Type: application/json" --request POST --data '{
+        "base64": "....",
+    }' http://51.144.142.34:3000/image
     ```
