@@ -1,0 +1,3 @@
+C:\Shared\git\NotS-Project\poc\api\faceapi\faceapi\obj\Debug\faceapi.njsprojAssemblyReference.cache
+C:\Shared\git\NotS-Project\poc\api\faceapi\faceapi\obj\Debug\faceapi.njsproj.CoreCompileInputs.cache
+C:\Shared\git\NotS-Project\poc\api\faceapi\faceapi\bin\Microsoft.NodejsTools.WebRole.dll
