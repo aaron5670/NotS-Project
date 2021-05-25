@@ -1,8 +1,9 @@
+using Assets.Scripts;
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -11,7 +12,6 @@ public class FaceTextManager : MonoBehaviour
     private TextMesh textMesh;
     private ARCameraManager cameraManager;
     private Texture2D m_Texture;
-
 
     // Start is called before the first frame update
     async void Start()
@@ -119,24 +119,54 @@ public class FaceTextManager : MonoBehaviour
         // Making a PNG
         byte[] m_Texture_Png = m_Texture.EncodeToPNG();
 
-        GetMedicalDataOfPersonFromPicture(m_Texture_Png);
+        StorePictureInGallery(m_Texture_Png);
+        yield return GetTestDataUnityRequest(m_Texture_Png);
 
         // Need to dispose the request to delete resources associated
         // with the request, including the raw data.
         request.Dispose();
     }
 
-    public void GetMedicalDataOfPersonFromPicture(byte[] image)
+    public void StorePictureInGallery(byte[] imageFace)
     {
         //Store picture in gallery
         string name = string.Format("{0}_Capture{1}_{2}.png", Application.productName, "{0}", System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
-        NativeGallery.SaveImageToGallery(image, Application.productName, name);
+        NativeGallery.SaveImageToGallery(imageFace, Application.productName, name);
 
         textMesh.text = "Picture saved in gallery";
+    }
 
-        //TO DO Send picture to FR and get medical data
-        //Send screencapture to facial recognition
-        //Get Medical data
-        //Set Medical data in textMesh
+    IEnumerator GetTestDataUnityRequest(byte[] imageFace)
+    {
+        TestData testData = new TestData();
+        testData.id = 25;
+        testData.first_name = "Corine";
+        testData.phone = "123456";
+        string imageString = Convert.ToBase64String(imageFace);
+        testData.image = imageString;
+        Debug.Log(testData.image);
+        string jsonString = JsonUtility.ToJson(testData);
+
+        UnityWebRequest webRequest = UnityWebRequest.Put("https://myfakeapi.com/api/users/", jsonString);
+        webRequest.method = "POST";
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+        webRequest.SetRequestHeader("Accept", "application/json");
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(webRequest.error);
+        }
+        else
+        {
+            var rawJson = webRequest.downloadHandler.text;
+            TestUser user = JsonUtility.FromJson<TestUser>(rawJson);
+            Debug.Log("Form upload complete!");
+            Debug.Log(webRequest.downloadHandler.text);
+            Debug.Log(user.userData.image.ToString());
+            textMesh.text = user.userData.id + ' ' + user.userData.first_name;
+        }
+
+        webRequest.Dispose();
     }
 }
