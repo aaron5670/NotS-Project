@@ -1,20 +1,13 @@
+const debug = require('debug')('my express app');
+const faceapi = require('face-api.js');
+const canvas = require('canvas');
+const express = require('express');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const routes = require('./routes/index');
+const users = require('./routes/users');
 
-var debug = require('debug')('my express app');
-let faceapi = require('face-api.js');
-let canvas = require('canvas');
-var express = require('express');
-let fileuploader = require('express-fileupload');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
-var app = express();
-
+const app = express();
 
 const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
@@ -22,30 +15,20 @@ faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 let desc;
 let faceMatcher;
 
-
 Promise.all([
     faceapi.nets.faceRecognitionNet.loadFromDisk('./models'),
     faceapi.nets.faceLandmark68Net.loadFromDisk('./models'),
     faceapi.nets.ssdMobilenetv1.loadFromDisk('./models')
 ]).then(() => setupFaceapi())
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(fileuploader());
+app.use(bodyParser.json({ limit: "50mb" }));
 
 app.post('/image', async (req, res) => {
-    let image  = req.files
-    console.log(image)
-    const i = await canvas.loadImage('./images/test.png');
+    const {base64} = req.body;
+
+    const i = await canvas.loadImage(`data:image/png;base64,${base64}`);
+
     console.log('image uploaded')
     const displaySize = { width: i.width, height: i.height }
     const detections = await faceapi.detectAllFaces(i).withFaceLandmarks().withFaceDescriptors()
