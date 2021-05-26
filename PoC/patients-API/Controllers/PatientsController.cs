@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using patients_API;
 using patients_API.Models;
 
 namespace patients_API.Controllers
@@ -25,14 +23,21 @@ namespace patients_API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Patient>>> GetPatient()
         {
-            return await _context.Patient.ToListAsync();
+            return await _context.Patient
+                .Include(p => p.Medicines)
+                .Include(p => p.Care)
+                .ToListAsync();
         }
 
         // GET: api/Patients/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(int id)
         {
-            var patient = await _context.Patient.FindAsync(id);
+            var patient = await _context.Patient
+                .Include(p => p.Medicines)
+                .Include(p => p.Care)
+                .Where(p => p.Id == id)
+                .FirstAsync();
 
             if (patient == null)
             {
