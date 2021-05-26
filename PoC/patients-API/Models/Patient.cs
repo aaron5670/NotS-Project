@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace patients_API.Models
 {
@@ -6,10 +6,10 @@ namespace patients_API.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
-        public int TelephoneNumber { get; set; }
-        public DateTime Birthdate { get; set; }
+        public int Age { get; set; }
         public string Gender { get; set; }
-        public string BloodType { get; set; }
+        public List<Medicine> Medicines { get; set; }
+        public List<Care> Care { get; set; }
+        public string bloodType { get; set; }
     }
 }
