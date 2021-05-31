@@ -8,10 +8,10 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.json({limit: "10mb"}));
 
-const { Canvas, Image, ImageData } = canvas;
-faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
+const {Canvas, Image, ImageData} = canvas;
+faceapi.env.monkeyPatch({Canvas, Image, ImageData});
 
 let desc;
 let faceMatcher;
@@ -25,24 +25,23 @@ Promise.all([
 app.post('/image', async (req, res) => {
     const {base64} = req.body;
     const i = await canvas.loadImage(`data:image/png;base64,${base64}`);
-    const displaySize = { width: i.width, height: i.height }
+    const displaySize = {width: i.width, height: i.height}
     const detections = await faceapi.detectAllFaces(i).withFaceLandmarks().withFaceDescriptors()
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
-    console.log('results\n', results)
-    
-    let patients = []
 
-    results.forEach(r => {
+    let faceUnknown;
+    let patients = results.map(r => {
         if (r._label !== "unknown") {
-
             console.log('Gevonden gezicht van: ' + r._label)
-            patients.push(getPatientData(r._label))
-        }
-    })
+            return getPatientData(r._label)
+        } else faceUnknown = true;
+    });
+
+    if (faceUnknown) return res.json({error: 'face-unknown'});
 
     const patientsData = await Promise.all(patients)
-    return res.json(JSON.parse(patientsData));
+    return res.json(patientsData);
 });
 
 app.listen(process.env.PORT || 3000, function () {
@@ -51,10 +50,9 @@ app.listen(process.env.PORT || 3000, function () {
 
 const getPatientData = (id) => {
     return fetch(`https://patients-api.azurewebsites.net/api/patients/${id}`)
-        .then(res => res.text())
-        .then(r => {
-            console.log(r)
-            return r;
+        .then(res => res.json())
+        .then(result => {
+            return result;
         })
 }
 
