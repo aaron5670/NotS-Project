@@ -1,3 +1,4 @@
+
 const tf = require('@tensorflow/tfjs-node')
 const faceapi = require('@vladmandic/face-api');
 const canvas = require('canvas');
@@ -5,6 +6,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./routes/index');
 const users = require('./routes/users');
+const fetch = require('node-fetch');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(bodyParser.json({ limit: "10mb" }));
@@ -30,9 +34,16 @@ app.post('/image', async (req, res) => {
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
 
-    return res.send(results);
-});
+    let patients = []
 
+    results.forEach(r => {
+        if (r._label !== "unknown")
+            patients.push(getPatientData(r._label))
+    })
+
+    const patientsData = await Promise.all(patients)
+    return res.send(patientsData);
+});
 
 app.use('/', routes);
 app.use('/users', users);
@@ -43,6 +54,15 @@ const server = app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + server.address().port);
 });
 
+const getPatientData = (id) => {
+    return fetch(`https://patients-api.azurewebsites.net/api/patients/${id}`)
+        .then(res => res.text())
+        .then(r => {
+            console.log(r)
+            return r;
+        })
+}
+
 const setupFaceapi = async () => {
     desc = await loadLabeledImages();
     faceMatcher = new faceapi.FaceMatcher(desc, 0.6)
@@ -50,11 +70,16 @@ const setupFaceapi = async () => {
 }
 
 function loadLabeledImages() {
-    const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Mark Rutte', 'Tony Stark']
+    const dir = './images'
+    const labels = getDirectories(dir)
     return Promise.all(
         labels.map(async label => {
+            const amount = fs.readdir(`${dir}/${label}`, (err, files) => {
+                console.log(`Aantal files in: ${label}: ${files.length}`)
+                return files.length;
+            });
             const descriptions = []
-            for (let i = 1; i <= 2; i++) {
+            for (let i = 1; i <= amount; i++) {
                 const img = await canvas.loadImage(`./images/${label}/${i}.jpg`)
                 const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
                 descriptions.push(detections.descriptor)
@@ -65,3 +90,4 @@ function loadLabeledImages() {
     )
 }
 
+const getDirectories = srcPath => fs.readdirSync(srcPath).filter(file => fs.statSync(path.join(srcPath, file)).isDirectory())
