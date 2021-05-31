@@ -33,12 +33,16 @@ app.post('/image', async (req, res) => {
     const detections = await faceapi.detectAllFaces(i).withFaceLandmarks().withFaceDescriptors()
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
+    console.log('results\n', results)
 
     let patients = []
 
     results.forEach(r => {
-        if (r._label !== "unknown")
+        if (r._label !== "unknown") {
+
+            console.log('Gevonden gezicht van: ' + r._label)
             patients.push(getPatientData(r._label))
+        }
     })
 
     const patientsData = await Promise.all(patients)
@@ -65,6 +69,7 @@ const getPatientData = (id) => {
 
 const setupFaceapi = async () => {
     desc = await loadLabeledImages();
+    console.log(desc)
     faceMatcher = new faceapi.FaceMatcher(desc, 0.6)
     console.log('Images data set loaded')
 }
@@ -74,13 +79,10 @@ function loadLabeledImages() {
     const labels = getDirectories(dir)
     return Promise.all(
         labels.map(async label => {
-            const amount = fs.readdir(`${dir}/${label}`, (err, files) => {
-                console.log(`Aantal files in: ${label}: ${files.length}`)
-                return files.length;
-            });
+            const amount = fs.readdirSync(`${dir}/${label}`).length;
             const descriptions = []
             for (let i = 1; i <= amount; i++) {
-                const img = await canvas.loadImage(`./images/${label}/${i}.jpg`)
+                const img = await canvas.loadImage(`${dir}/${label}/${i}.jpg`)
                 const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
                 descriptions.push(detections.descriptor)
             }
