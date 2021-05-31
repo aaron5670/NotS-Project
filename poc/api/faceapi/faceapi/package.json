@@ -1,0 +1,27 @@
+{
+  "name": "faceapi",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "description": "faceapi",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^3.6.1",
+    "@vladmandic/face-api": "^1.2.5",
+    "body-parser": "^1.15.0",
+    "canvas": "^2.8.0",
+    "cookie-parser": "^1.4.0",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "express-fileupload": "^1.2.1",
+    "face-api.js": "^0.22.2",
+    "morgan": "^1.7.0",
+    "node-fetch": "^2.6.1",
+    "pug": "^2.0.0-beta6",
+    "serve-favicon": "^2.3.0"
+  }
+}

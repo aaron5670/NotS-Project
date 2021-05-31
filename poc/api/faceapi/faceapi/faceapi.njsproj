@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>faceapi</Name>
+    <RootNamespace>faceapi</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>b06ca27b-a183-4d78-a3db-9a68406cb260</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>app.js</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>true</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="app.js" />
+    <Content Include="images\.gitignore" />
+    <Content Include="images\Black Widow\1.jpg" />
+    <Content Include="images\Black Widow\2.jpg" />
+    <Content Include="images\Captain America\1.jpg" />
+    <Content Include="images\Captain America\2.jpg" />
+    <Content Include="images\Captain Marvel\1.jpg" />
+    <Content Include="images\Captain Marvel\2.jpg" />
+    <Content Include="images\Hawkeye\1.jpg" />
+    <Content Include="images\Hawkeye\2.jpg" />
+    <Content Include="images\Jim Rhodes\1.jpg" />
+    <Content Include="images\Jim Rhodes\2.jpg" />
+    <Content Include="images\Thor\1.jpg" />
+    <Content Include="images\Thor\2.jpg" />
+    <Content Include="images\Tony Stark\1.jpg" />
+    <Content Include="images\Tony Stark\2.jpg" />
+    <Content Include="models\age_gender_model-shard1" />
+    <Content Include="models\age_gender_model-weights_manifest.json" />
+    <Content Include="models\face_expression_model-shard1" />
+    <Content Include="models\face_expression_model-weights_manifest.json" />
+    <Content Include="models\face_landmark_68_model-shard1" />
+    <Content Include="models\face_landmark_68_model-weights_manifest.json" />
+    <Content Include="models\face_landmark_68_tiny_model-shard1" />
+    <Content Include="models\face_landmark_68_tiny_model-weights_manifest.json" />
+    <Content Include="models\face_recognition_model-shard1" />
+    <Content Include="models\face_recognition_model-shard2" />
+    <Content Include="models\face_recognition_model-weights_manifest.json" />
+    <Content Include="models\mtcnn_model-shard1" />
+    <Content Include="models\mtcnn_model-weights_manifest.json" />
+    <Content Include="models\ssd_mobilenetv1_model-shard1" />
+    <Content Include="models\ssd_mobilenetv1_model-shard2" />
+    <Content Include="models\ssd_mobilenetv1_model-weights_manifest.json" />
+    <Content Include="models\tiny_face_detector_model-shard1" />
+    <Content Include="models\tiny_face_detector_model-weights_manifest.json" />
+    <Content Include="public\models\age_gender_model-shard1" />
+    <Content Include="public\models\age_gender_model-weights_manifest.json" />
+    <Content Include="public\models\face_expression_model-shard1" />
+    <Content Include="public\models\face_expression_model-weights_manifest.json" />
+    <Content Include="public\models\face_landmark_68_model-shard1" />
+    <Content Include="public\models\face_landmark_68_model-weights_manifest.json" />
+    <Content Include="public\models\face_landmark_68_tiny_model-shard1" />
+    <Content Include="public\models\face_landmark_68_tiny_model-weights_manifest.json" />
+    <Content Include="public\models\face_recognition_model-shard1" />
+    <Content Include="public\models\face_recognition_model-shard2" />
+    <Content Include="public\models\face_recognition_model-weights_manifest.json" />
+    <Content Include="public\models\mtcnn_model-shard1" />
+    <Content Include="public\models\mtcnn_model-weights_manifest.json" />
+    <Content Include="public\models\ssd_mobilenetv1_model-shard1" />
+    <Content Include="public\models\ssd_mobilenetv1_model-shard2" />
+    <Content Include="public\models\ssd_mobilenetv1_model-weights_manifest.json" />
+    <Content Include="public\models\tiny_face_detector_model-shard1" />
+    <Content Include="public\models\tiny_face_detector_model-weights_manifest.json" />
+    <Content Include="routes\index.js" />
+    <Content Include="routes\users.js" />
+    <Content Include="package.json" />
+    <Content Include="public\stylesheets\main.css" />
+    <Content Include="README.md" />
+    <Content Include="views\index.pug" />
+    <Content Include="views\layout.pug" />
+    <Content Include="views\error.pug" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="images\" />
+    <Folder Include="images\Black Widow\" />
+    <Folder Include="images\Captain America\" />
+    <Folder Include="images\Captain Marvel\" />
+    <Folder Include="images\Hawkeye\" />
+    <Folder Include="images\Jim Rhodes\" />
+    <Folder Include="images\Thor\" />
+    <Folder Include="images\Tony Stark\" />
+    <Folder Include="models\" />
+    <Folder Include="public\" />
+    <Folder Include="public\images\" />
+    <Folder Include="public\javascripts\" />
+    <Folder Include="public\models\" />
+    <Folder Include="public\stylesheets\" />
+    <Folder Include="routes\" />
+    <Folder Include="views\" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
