@@ -1,11 +1,8 @@
-
-const tf = require('@tensorflow/tfjs-node')
+require('@tensorflow/tfjs-node')
 const faceapi = require('@vladmandic/face-api');
 const canvas = require('canvas');
 const express = require('express');
 const bodyParser = require('body-parser');
-const routes = require('./routes/index');
-const users = require('./routes/users');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
@@ -25,7 +22,6 @@ Promise.all([
     faceapi.nets.ssdMobilenetv1.loadFromDisk('./models')
 ]).then(() => setupFaceapi())
 
-
 app.post('/image', async (req, res) => {
     const {base64} = req.body;
     const i = await canvas.loadImage(`data:image/png;base64,${base64}`);
@@ -34,7 +30,7 @@ app.post('/image', async (req, res) => {
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
     console.log('results\n', results)
-
+    
     let patients = []
 
     results.forEach(r => {
@@ -46,16 +42,11 @@ app.post('/image', async (req, res) => {
     })
 
     const patientsData = await Promise.all(patients)
-    return res.send(patientsData);
+    return res.json(JSON.parse(patientsData));
 });
 
-app.use('/', routes);
-app.use('/users', users);
-
-app.set('port', process.env.PORT || 3000);
-
-const server = app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + server.address().port);
+app.listen(process.env.PORT || 3000, function () {
+    console.log('Express server listening on port ' + (process.env.PORT || 3000));
 });
 
 const getPatientData = (id) => {
@@ -74,8 +65,9 @@ const setupFaceapi = async () => {
     console.log('Images data set loaded')
 }
 
+
 function loadLabeledImages() {
-    const dir = './images'
+    const dir = 'images'
     const labels = getDirectories(dir)
     return Promise.all(
         labels.map(async label => {
