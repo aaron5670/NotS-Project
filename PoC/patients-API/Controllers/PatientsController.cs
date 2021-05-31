@@ -33,18 +33,20 @@ namespace patients_API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(int id)
         {
-            var patient = await _context.Patient
-                .Include(p => p.Medicines)
-                .Include(p => p.Care)
-                .Where(p => p.Id == id)
-                .FirstAsync();
-
-            if (patient == null)
+            try
+            {
+                var patient = await _context.Patient
+                    .Include(p => p.Medicines)
+                    .Include(p => p.Care)
+                    .Where(p => p.Id == id)
+                    .FirstAsync();
+                
+                return patient;
+            }
+            catch (Exception e)
             {
                 return NotFound();
             }
-
-            return patient;
         }
 
         // PUT: api/Patients/5
