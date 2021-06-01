@@ -29,20 +29,24 @@ app.post('/image', async (req, res) => {
     const detections = await faceapi.detectAllFaces(i).withFaceLandmarks().withFaceDescriptors()
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
-    console.log('results\n', results)
-    
+
+    // Array met promises van fetch
     let patients = []
 
-    results.forEach(r => {
-        if (r._label !== "unknown") {
-
-            console.log('Gevonden gezicht van: ' + r._label)
+    // Als er geen gezichten detected zijn of als er 1 detected is maar niet bekend bij faceapi
+    if (results.length < 1 || (results.length === 1 && results[0]._label === "unknown")) {
+        let response = []
+        response.push(toErrorResponse("Not identified"))
+        return res.json(response)
+    } else {
+        results.forEach(r => {
             patients.push(getPatientData(r._label))
-        }
-    })
+        })
 
-    const patientsData = await Promise.all(patients)
-    return res.json(JSON.parse(patientsData));
+        // Wachten tot alle fetch requests voltooid zijn
+        const patientsData = await Promise.all(patients)
+        return res.json(patientsData);
+    }
 });
 
 app.listen(process.env.PORT || 3000, function () {
@@ -51,16 +55,19 @@ app.listen(process.env.PORT || 3000, function () {
 
 const getPatientData = (id) => {
     return fetch(`https://patients-api.azurewebsites.net/api/patients/${id}`)
-        .then(res => res.text())
-        .then(r => {
-            console.log(r)
-            return r;
+        .then(async res => {
+            console.log('Response STATUS: ' , res.status)
+            if (res.status === 404 || res.status === 400) {
+                return toErrorResponse("No data", id)
+            } else {
+                const data = await res.json();
+                return toPatientResponse("Identified", data);
+            }
         })
 }
 
 const setupFaceapi = async () => {
     desc = await loadLabeledImages();
-    console.log(desc)
     faceMatcher = new faceapi.FaceMatcher(desc, 0.6)
     console.log('Images data set loaded')
 }
@@ -85,3 +92,18 @@ function loadLabeledImages() {
 }
 
 const getDirectories = srcPath => fs.readdirSync(srcPath).filter(file => fs.statSync(path.join(srcPath, file)).isDirectory())
+
+const toPatientResponse = (status, patient, info = "") => {
+    return {
+        status: status,
+        info: info,
+        patient: { ...patient }
+    }
+}
+
+const toErrorResponse = (status, info = "") => {
+    return {
+        status: status,
+        info: info
+    }
+}
