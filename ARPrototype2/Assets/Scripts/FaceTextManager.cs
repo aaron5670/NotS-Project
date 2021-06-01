@@ -1,6 +1,9 @@
 using Assets.Scripts;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -28,14 +31,14 @@ public class FaceTextManager : MonoBehaviour
         }
         else
         {
-            textMesh.text = "Hello World, In need for medical information";
+            textMesh.text = "Hello, Trying to get information";
             try
             {
                 await GetImageAsync();
             }
             catch
             {
-                textMesh.text = "Image saving failed";
+                textMesh.text = "failed to get information\nTry again";
             }
         }
     }
@@ -73,10 +76,10 @@ public class FaceTextManager : MonoBehaviour
             inputRect = new RectInt(0, 0, cpuImage.width, cpuImage.height),
 
             // Downsample by 2.
-            outputDimensions = new Vector2Int(cpuImage.width / 2, cpuImage.height / 2),
+            outputDimensions = new Vector2Int(cpuImage.width, cpuImage.height),
 
             // Color image format.
-            outputFormat = TextureFormat.ARGB32,
+            outputFormat = TextureFormat.RGBA32,
 
             // Flip across the Y axis.
             transformation = XRCpuImage.Transformation.MirrorY
@@ -110,30 +113,125 @@ public class FaceTextManager : MonoBehaviour
                 false);
         }
 
-        Debug.Log(rawData);
-
         // Copy the image data into the texture.
         m_Texture.LoadRawTextureData(rawData);
         m_Texture.Apply();
 
-        // Making a PNG
-        byte[] m_Texture_Png = m_Texture.EncodeToPNG();
+        Texture2D rotatedTexture = m_Texture;
 
-        StorePictureInGallery(m_Texture_Png);
-        yield return GetTestDataUnityRequest(m_Texture_Png);
+        switch (Screen.orientation)
+        {
+            case ScreenOrientation.Portrait:
+                rotatedTexture = rotateTexture(m_Texture, true);
+                break;
+            case ScreenOrientation.LandscapeLeft:
+                rotatedTexture = rotateTexture(m_Texture, true);
+                rotatedTexture = rotateTexture(rotatedTexture, true);
+                break;
+            case ScreenOrientation.LandscapeRight:
+                break;
+            case ScreenOrientation.PortraitUpsideDown:
+                rotatedTexture = rotateTexture(m_Texture, false);
+                break;
+        }
+
+        // Making a PNG
+        byte[] m_Texture_jpg = rotatedTexture.EncodeToJPG();
+
+        StorePictureInGallery(m_Texture_jpg);
+        yield return GetUserData(m_Texture_jpg);
 
         // Need to dispose the request to delete resources associated
         // with the request, including the raw data.
         request.Dispose();
     }
 
+    Texture2D rotateTexture(Texture2D originalTexture, bool clockwise)
+    {
+        Color32[] original = originalTexture.GetPixels32();
+        Color32[] rotated = new Color32[original.Length];
+        int w = originalTexture.width;
+        int h = originalTexture.height;
+
+        int iRotated, iOriginal;
+
+        for (int j = 0; j < h; ++j)
+        {
+            for (int i = 0; i < w; ++i)
+            {
+                iRotated = (i + 1) * h - j - 1;
+                iOriginal = clockwise ? original.Length - 1 - (j * w + i) : j * w + i;
+                rotated[iRotated] = original[iOriginal];
+            }
+        }
+
+        Texture2D rotatedTexture = new Texture2D(h, w);
+        rotatedTexture.SetPixels32(rotated);
+        rotatedTexture.Apply();
+        return rotatedTexture;
+    }
+
     public void StorePictureInGallery(byte[] imageFace)
     {
         //Store picture in gallery
-        string name = string.Format("{0}_Capture{1}_{2}.png", Application.productName, "{0}", System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
+        string name = string.Format("{0}_Capture{1}_{2}.jpg", Application.productName, "{0}", System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
         NativeGallery.SaveImageToGallery(imageFace, Application.productName, name);
 
-        textMesh.text = "Picture saved in gallery";
+        textMesh.text = "Picture saved in gallery\nWaiting for information";
+    }
+
+    IEnumerator GetUserData(byte[] imageFace)
+    {
+        ImageObject imageObject = new ImageObject();
+        string imageString = Convert.ToBase64String(imageFace);
+        imageObject.base64 = imageString;
+        string jsonString = JsonUtility.ToJson(imageObject);
+        Debug.Log(jsonString);
+
+        UnityWebRequest webRequest = UnityWebRequest.Put("http://51.144.142.34:3000/image", jsonString);
+        webRequest.method = "POST";
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+        webRequest.SetRequestHeader("Accept", "application/json");
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("error from request?");
+            Debug.Log(webRequest.error);
+        }
+        else
+        {
+            var rawJson = webRequest.downloadHandler.text;
+            rawJson = "{\"Persons\":" + rawJson + "}";
+            Debug.Log(rawJson);
+
+            PatientStatus[] Patients = JsonHelper.FromJson<PatientStatus>(rawJson);
+            Debug.Log("Picture send");
+
+            if(Patients.Length < 1 || Patients[0].status == "")
+            {
+                textMesh.text = "No Person detected by face-api";
+            }
+            else if ((Patients[0].status == "identified"))
+            {
+                textMesh.text = "naam: " + Patients[0].patient.name + "\nleeftijd: " + Patients[0].patient.age + "\ngeslacht: " + Patients[0].patient.gender;
+            } 
+            else if ((Patients[0].status == "not identified"))
+            {
+                textMesh.text = "Person not identified";
+            }
+            else if ((Patients[0].status == "no data"))
+            {
+                textMesh.text = "naam: " + Patients[0].info + " No data found";
+            }
+
+            //Debug.Log("Form upload complete!");
+            //Debug.Log(webRequest.downloadHandler.text);
+            ////Debug.Log(user.userData.image.ToString());
+            //textMesh.text = userMedicalData.name + ' ' + userMedicalData.leeftijd + ' ' + userMedicalData.geslacht;
+        }
+
+        webRequest.Dispose();
     }
 
     IEnumerator GetTestDataUnityRequest(byte[] imageFace)
