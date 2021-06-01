@@ -138,7 +138,7 @@ public class FaceTextManager : MonoBehaviour
         // Making a PNG
         byte[] m_Texture_jpg = rotatedTexture.EncodeToJPG();
 
-        StorePictureInGallery(m_Texture_jpg);
+        //StorePictureInGallery(m_Texture_jpg);
         yield return GetUserData(m_Texture_jpg);
 
         // Need to dispose the request to delete resources associated
