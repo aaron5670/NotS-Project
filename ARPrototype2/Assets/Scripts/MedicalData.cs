@@ -14,8 +14,8 @@ namespace Assets.Scripts
         public int age;
         public string gender;
         public string bloodType;
-        public List<string> medicines;
-        public List<string> care;
+        public Medicines[] medicines;
+        public Care[] care;
     }
 
     [Serializable]
@@ -24,6 +24,20 @@ namespace Assets.Scripts
         public string status;
         public string info;
         public MedicalData patient;
+    }
+
+    [Serializable]
+    public class Medicines
+    {
+        public int id;
+        public string name;
+    }
+
+    [Serializable]
+    public class Care
+    {
+        public int id;
+        public string name;
     }
 
     [Serializable]

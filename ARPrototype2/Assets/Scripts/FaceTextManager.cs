@@ -212,15 +212,23 @@ public class FaceTextManager : MonoBehaviour
             {
                 textMesh.text = "No Person detected by face-api";
             }
-            else if ((Patients[0].status == "identified"))
+            else if ((Patients[0].status.ToLower() == "identified"))
             {
                 textMesh.text = "naam: " + Patients[0].patient.name + "\nleeftijd: " + Patients[0].patient.age + "\ngeslacht: " + Patients[0].patient.gender;
+                if(Patients[0].patient.medicines.Length > 0)
+                {
+                    textMesh.text = textMesh.text + "\nmedicijnen: " + Patients[0].patient.medicines[0].name;
+                }
+                if (Patients[0].patient.care.Length > 0)
+                {
+                    textMesh.text = textMesh.text + "\nzorg: " + Patients[0].patient.care[0].name;
+                }
             } 
-            else if ((Patients[0].status == "not identified"))
+            else if ((Patients[0].status.ToLower() == "not identified"))
             {
                 textMesh.text = "Person not identified";
             }
-            else if ((Patients[0].status == "no data"))
+            else if ((Patients[0].status.ToLower() == "no data"))
             {
                 textMesh.text = "naam: " + Patients[0].info + " No data found";
             }
