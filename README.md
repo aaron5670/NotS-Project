@@ -2,25 +2,9 @@
 # NotS-Project
 NotS-Project with Augmented Reality and Facial Recognition.
 
-## Gemaakte prototypes:
-**Bekijk [hier](https://aaron5670.github.io/NotS-Project/) de prototypes.**
-
-### Augmented Reality
-- AR.js met A-Frame [demo](https://aaron5670.github.io/NotS-Project/prototype-1.html)
-- Augmented Reality met Unity
-
-### Face Recognition
-
-#### Microsoft Azure Face
-Bekijk [hier](https://github.com/aaron5670/NotS-Project/tree/main/opencv4nodejs-docker) de source code van OpenCV4Node.js + Express.js + Docker.
-
-#### OpenCV4Node.js + Express.js + Docker
-OpenCV4Node.js met Express.js prototype (Hierbij werkt alleen Face Detection). \
-Bekijk [hier](https://github.com/aaron5670/NotS-Project/tree/main/opencv4nodejs-docker) de source code van OpenCV4Node.js + Express.js + Docker.
-![Screenshot](https://github.com/aaron5670/NotS-Project/blob/main/docs/opencv4nodejs.png)
 
 ## Proof-of-Concept
-Voor het proof of concept maken wij voor de backend gebruik van **Microservices**.
+Voor het proof of concept maken wij voor de backend gebruik van een **Microservices Architecture**.
 
 ### Backend
 - **Patiënten mock server API**
@@ -55,3 +39,29 @@ Voor het proof of concept maken wij voor de backend gebruik van **Microservices*
         "base64": "....",
     }' http://51.144.142.34:3000/image
     ```
+- **Android App gemaakt in Unity**
+  - De kan doormiddel van Face Detection gezichten detecteren.
+  - Wanneer een gezicht is gedectereerd, wordt er een foto gemaakt en opgestuurd naar de *Face Recognition API*.
+
+
+### Afbeeldingen Proof-of-Concept
+![Architectuur Proof-of-Concept](https://github.com/aaron5670/NotS-Project/blob/main/docs/Architectuur.png)
+![Azure omgeving](https://github.com/aaron5670/NotS-Project/blob/main/docs/Azure-omgeving.png)
+![Demo](https://github.com/aaron5670/NotS-Project/blob/main/docs/Proof-of-Concept.gif)
+
+## Gemaakte prototypes:
+**Bekijk [hier](https://aaron5670.github.io/NotS-Project/) de prototypes.**
+
+### Augmented Reality
+- AR.js met A-Frame [demo](https://aaron5670.github.io/NotS-Project/prototype-1.html)
+- Augmented Reality met Unity
+
+### Face Recognition
+
+#### Microsoft Azure Face
+Bekijk [hier](https://github.com/aaron5670/NotS-Project/tree/main/opencv4nodejs-docker) de source code van OpenCV4Node.js + Express.js + Docker.
+
+#### OpenCV4Node.js + Express.js + Docker
+OpenCV4Node.js met Express.js prototype (Hierbij werkt alleen Face Detection). \
+Bekijk [hier](https://github.com/aaron5670/NotS-Project/tree/main/opencv4nodejs-docker) de source code van OpenCV4Node.js + Express.js + Docker.
+![Screenshot](https://github.com/aaron5670/NotS-Project/blob/main/docs/opencv4nodejs.png)
