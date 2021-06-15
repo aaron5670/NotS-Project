@@ -40,7 +40,7 @@ Voor het proof of concept maken wij voor de backend gebruik van een **Microservi
     }' http://51.144.142.34:3000/image
     ```
 - **Android App gemaakt in Unity**
-  - De kan doormiddel van Face Detection gezichten detecteren.
+  - De applicatie kan doormiddel van Face Detection gezichten detecteren.
   - Wanneer een gezicht is gedectereerd, wordt er een foto gemaakt en opgestuurd naar de *Face Recognition API*.
 
 
