@@ -47,6 +47,7 @@ Voor het proof of concept maken wij voor de backend gebruik van een **Microservi
 ### Afbeeldingen Proof-of-Concept
 ![Architectuur Proof-of-Concept](https://github.com/aaron5670/NotS-Project/blob/main/docs/Architectuur.png)
 ![Azure omgeving](https://github.com/aaron5670/NotS-Project/blob/main/docs/Azure-omgeving.png)
+![POST-request naar de Face-API](https://github.com/aaron5670/NotS-Project/blob/main/docs/face-api-js.png)
 ![Demo](https://github.com/aaron5670/NotS-Project/blob/main/docs/Proof-of-Concept.gif)
 
 ## Gemaakte prototypes:
